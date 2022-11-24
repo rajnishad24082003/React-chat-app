@@ -206,7 +206,7 @@
   margin: 20px 0;
 }
 
-.social-container a {
+.social-container button {
   border: 1px solid #dddddd;
   border-radius: 50%;
   display: inline-flex;

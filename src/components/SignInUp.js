@@ -1,7 +1,45 @@
 import React, { useState } from "react";
 import "../assets/css/signup.css";
-
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { serverTimestamp, ref, set } from "firebase/database";
+import { auth, database } from "../misc/firebase";
 function SignInUp() {
+  let onproviderlogin = async (provider) => {
+    try {
+      let result = await signInWithPopup(auth, provider);
+
+      // await database.ref(`/profile/${result.user.uid}`).set({
+      //   name: result.user.displayName,
+      //   email: result.user.email,
+      //   createdAt: serverTimestamp(),
+      // });
+
+      await set(ref(database, `/profile/${result.user.uid}`), {
+        name: result.user.displayName,
+        email: result.user.email,
+        createdAt: serverTimestamp(),
+        image: result.user.photoURL,
+      });
+      console.log(result);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  let onfacebooklogin = () => {
+    onproviderlogin(new FacebookAuthProvider());
+  };
+  let ongooglelogin = () => {
+    onproviderlogin(new GoogleAuthProvider());
+  };
+
   let [hideShow, setHideShow] = useState("");
 
   let signinpage = () => {
@@ -18,16 +56,20 @@ function SignInUp() {
         <div className="form-container sign-up-container">
           <form action="#" className="formsignup">
             <h1 className="h1signup">Create Account</h1>
+
             <div className="social-container">
-              <a href="*" className="social asignup">
+              <button onClick={onfacebooklogin} className="social asignup">
                 <i className="bi bi-facebook"></i>
-              </a>
-              <a href="*" className="social asignup">
+              </button>
+              {/* <IconButton
+                icon={<FacebookOfficial />}
+                color="blue"
+                appearance="primary"
+                circle
+              /> */}
+              <button onClick={ongooglelogin} className="social asignup">
                 <i className="bi bi-google"></i>
-              </a>
-              <a href="*" className="social asignup">
-                <i className="bi bi-linkedin"></i>
-              </a>
+              </button>
             </div>
             <span className="spansignup">
               or use your email for registration
@@ -57,15 +99,12 @@ function SignInUp() {
           <form action="#" className="formsignup">
             <h1 className="h1signup">Sign in</h1>
             <div className="social-container">
-              <a href="*" className="social asignup">
+              <button onClick={onfacebooklogin} className="social asignup">
                 <i className="bi bi-facebook"></i>
-              </a>
-              <a href="*" className="social asignup">
+              </button>
+              <button onClick={ongooglelogin} className="social asignup">
                 <i className="bi bi-google"></i>
-              </a>
-              <a href="*" className="social asignup">
-                <i className="bi bi-linkedin"></i>
-              </a>
+              </button>
             </div>
             <span className="spansignup">or use your account</span>
             <input className="inputsignup" type="email" placeholder="Email" />
@@ -74,7 +113,7 @@ function SignInUp() {
               type="password"
               placeholder="Password"
             />
-            <a href="*" className="asignup">
+            <a href="" className="asignup">
               Forgot your password?
             </a>
             <button className="buttonsignup">Sign In</button>
