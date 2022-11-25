@@ -1,10 +1,15 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { useProfile } from "../context/profile.context";
+import Loading from "./Loading";
 
 function PrivateRoute({ children }) {
-  const profile = false;
+  let { profile, isLoading } = useProfile();
+  if (isLoading && !profile) {
+    return <Loading></Loading>;
+  }
 
-  if (!profile) {
+  if (!profile && !isLoading) {
     return <Navigate to="/signinup" />;
   } else {
     return children;

@@ -1,0 +1,26 @@
+.userprofile {
+  position: relative;
+}
+.bi-x-lg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+}
+.hideclasssidebar {
+  transition: transform 2s;
+  transform: translateX(-100%);
+}
+.showclasssidebar {
+  transition: transform 2s;
+  transform: translateX(0%);
+}
+@media (max-width: 900px) {
+  .bi-x-lg {
+    display: block;
+  }
+}
+.bi-chevron-double-right {
+  position: fixed;
+  bottom: 50%;
+}

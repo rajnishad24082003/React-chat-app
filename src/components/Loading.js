@@ -1,12 +1,12 @@
 import React from "react";
-
+import "../assets/css/loading.css";
 function Loading() {
   return (
     <>
-      <div class="ringmaincon">
-        <div class="ring">
+      <div className="ringmaincon">
+        <div className="ring">
           Loading
-          <span class="ringspanclass"></span>
+          <span className="ringspanclass"></span>
         </div>
       </div>
     </>
