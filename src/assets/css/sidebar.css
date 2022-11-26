@@ -24,3 +24,25 @@
   position: fixed;
   bottom: 50%;
 }
+.heightlimit {
+  overflow-y: scroll;
+  max-height: 80vh;
+  position: fixed;
+  top: 6rem;
+}
+.nikenameinput {
+  border: none !important;
+}
+.nikenameinput:focus {
+}
+.mikenamediv {
+  display: flex;
+  background-color: white;
+  border-radius: 10px;
+}
+.displayIcon {
+  display: none;
+}
+.displaywriteIcon {
+  display: none;
+}

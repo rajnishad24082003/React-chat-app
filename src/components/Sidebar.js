@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Sidenav, Nav } from "rsuite";
-import DashboardIcon from "@rsuite/icons/legacy/Dashboard";
-import GroupIcon from "@rsuite/icons/legacy/Group";
-import MagicIcon from "@rsuite/icons/legacy/Magic";
-import GearCircleIcon from "@rsuite/icons/legacy/GearCircle";
+import { Sidenav, Nav, Message } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import Avatar from "../assets/img/team/team-1.jpg";
 import "../assets/css/sidebar.css";
+import NavItem from "./NavItem";
+import { useProfile } from "../context/profile.context";
+import { ref, set } from "firebase/database";
+import { database } from "../misc/firebase";
+
 function Sidebar() {
+  const { profile } = useProfile();
   let [responsivesidebar, setresponsivesidebar] = useState(null);
   const hidesidebar = () => {
     setresponsivesidebar("hideclasssidebar");
@@ -15,54 +16,88 @@ function Sidebar() {
   const showsidebar = () => {
     setresponsivesidebar("showclasssidebar");
   };
+  let [displayIcon, setdisplayIcon] = useState("displayIcon");
+  let [isEditable, setisEditable] = useState(false);
+  let [displaywriteIcon, setdisplaywriteIcon] = useState("");
+  let pencilIconclick = () => {
+    setisEditable(true);
+    setdisplayIcon("");
+    setdisplaywriteIcon("displaywriteIcon");
+  };
+  let [inputtextnikevalue, setinputtextnikevalue] = useState("");
+  let inputtextnike = (e) => {
+    if (isEditable) {
+      setinputtextnikevalue(e.target.value);
+    }
+  };
+  let savefun = async () => {
+    const starCountRef = ref(database, `/profile/${profile.uid}/name`);
+    await set(starCountRef, inputtextnikevalue);
+    setisEditable(false);
+    setdisplayIcon("displayIcon");
+    setdisplaywriteIcon("");
+  };
+  let discardfun = () => {
+    setisEditable(false);
+    setdisplayIcon("displayIcon");
+    setdisplaywriteIcon("");
+  };
+
   return (
     <>
       <i className="bi bi-chevron-double-right" onClick={showsidebar}></i>
       <div
-        className={`${responsivesidebar}`}
-        style={{ width: 240, marginTop: "6rem" }}
+        className={`${responsivesidebar} heightlimit`}
+        style={{ width: 240 }}
       >
         <Sidenav defaultOpenKeys={["3", "4"]}>
           <Sidenav.Body>
             <Nav activeKey="1">
-              <Nav.Item eventKey="5">
-                <div className="userprofile">
+              <div className="userprofile">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <img
-                    src={Avatar}
+                    src={profile.image}
                     alt=""
                     style={{
-                      margin: "0 1rem",
-                      width: "80%",
+                      width: "60%",
                       borderRadius: "100px",
                     }}
                   />
-                  <a>
-                    <i className={`bi bi-x-lg `} onClick={hidesidebar}></i>
-                  </a>
-                  <h4 style={{ textAlign: "center" }}>user name</h4>
                 </div>
-              </Nav.Item>
-              <Nav.Item eventKey="1" icon={<DashboardIcon />}>
-                Dashboard
-              </Nav.Item>
-              <Nav.Item eventKey="2" icon={<GroupIcon />}>
-                User Group
-              </Nav.Item>
-              <Nav.Menu eventKey="3" title="Advanced" icon={<MagicIcon />}>
-                <Nav.Item eventKey="3-1">Geo</Nav.Item>
-                <Nav.Item eventKey="3-2">Devices</Nav.Item>
-                <Nav.Item eventKey="3-3">Loyalty</Nav.Item>
-                <Nav.Item eventKey="3-4">Visit Depth</Nav.Item>
-              </Nav.Menu>
-              <Nav.Menu eventKey="4" title="Settings" icon={<GearCircleIcon />}>
-                <Nav.Item eventKey="4-1">Applications</Nav.Item>
-                <Nav.Item eventKey="4-2">Channels</Nav.Item>
-                <Nav.Item eventKey="4-3">Versions</Nav.Item>
-                <Nav.Menu eventKey="4-5" title="Custom Action">
-                  <Nav.Item eventKey="4-5-1">Action Name</Nav.Item>
-                  <Nav.Item eventKey="4-5-2">Action Params</Nav.Item>
-                </Nav.Menu>
-              </Nav.Menu>
+
+                <i className={`bi bi-x-lg `} onClick={hidesidebar}></i>
+                <h4 style={{ textAlign: "center" }}>{profile.name}</h4>
+                <h6 style={{ textAlign: "center" }}>{profile.email}</h6>
+                <div className="mikenamediv m-2 border p-1">
+                  <input
+                    type="text"
+                    className="form-control p-0 nikenameinput"
+                    placeholder="nike name"
+                    onChange={inputtextnike}
+                    value={inputtextnikevalue}
+                  />
+                  <i
+                    className={`bi bi-pencil-square ${displaywriteIcon}`}
+                    onClick={pencilIconclick}
+                  ></i>
+                  <i
+                    className={`bi bi-check ${displayIcon}`}
+                    onClick={savefun}
+                  ></i>
+                  <i
+                    className={`bi bi-x  ${displayIcon}`}
+                    onClick={discardfun}
+                  ></i>
+                </div>
+
+                <hr />
+              </div>
+              <NavItem contactData={[1, 2, 3, 4, 5, 6, 7]}></NavItem>
             </Nav>
           </Sidenav.Body>
         </Sidenav>

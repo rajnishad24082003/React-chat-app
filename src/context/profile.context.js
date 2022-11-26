@@ -12,12 +12,13 @@ export const ProfileProvider = ({ children }) => {
       if (authobj) {
         const starCountRef = ref(database, `/profile/${authobj.uid}`);
         onValue(starCountRef, (snapshot) => {
-          const { name, createdAt } = snapshot.val();
+          const { name, createdAt, image } = snapshot.val();
           const data = {
             name,
             createdAt,
             uid: authobj.uid,
             email: authobj.email,
+            image,
           };
           setProfile(data);
           setIsLoading(false);

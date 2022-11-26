@@ -2441,3 +2441,9 @@ section {
   font-size: 13px;
   color: #012970;
 }
+
+.sigoutbtn {
+  margin: 0 10px;
+  background-color: #ff731d;
+  color: #012970;
+}
