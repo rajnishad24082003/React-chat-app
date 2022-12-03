@@ -1,0 +1,9 @@
+.avatarmaindiv {
+  position: absolute;
+  left: 60%;
+  bottom: 0;
+  cursor: pointer;
+}
+.fileuploadbtn {
+  display: none;
+}

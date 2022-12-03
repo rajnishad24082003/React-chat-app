@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Sidenav, Nav, Message } from "rsuite";
+import { Sidenav, Nav } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import "../assets/css/sidebar.css";
 import NavItem from "./NavItem";
 import { useProfile } from "../context/profile.context";
 import { ref, set } from "firebase/database";
 import { database } from "../misc/firebase";
+import Provider from "./Provider";
+import AvatarUpload from "./AvatarUpload";
 
 function Sidebar() {
   const { profile } = useProfile();
@@ -42,13 +44,15 @@ function Sidebar() {
     setdisplayIcon("displayIcon");
     setdisplaywriteIcon("");
   };
-
   return (
     <>
-      <i className="bi bi-chevron-double-right" onClick={showsidebar}></i>
+      <i
+        className="bi bi-chevron-double-right pt-2 pb-2 pe-2 rounded-end"
+        onClick={showsidebar}
+      ></i>
       <div
         className={`${responsivesidebar} heightlimit`}
-        style={{ width: 240 }}
+        style={{ minWidth: 220 }}
       >
         <Sidenav defaultOpenKeys={["3", "4"]}>
           <Sidenav.Body>
@@ -58,21 +62,26 @@ function Sidebar() {
                   style={{
                     display: "flex",
                     justifyContent: "center",
+                    position: "relative",
                   }}
                 >
                   <img
-                    src={profile.image}
-                    alt=""
+                    src={
+                      profile.avatar ? `${profile.avatar}` : `${profile.image}`
+                    }
+                    alt="userimage not able to load"
                     style={{
                       width: "60%",
-                      borderRadius: "100px",
+                      borderRadius: "200px",
                     }}
                   />
+                  <AvatarUpload></AvatarUpload>
                 </div>
 
                 <i className={`bi bi-x-lg `} onClick={hidesidebar}></i>
                 <h4 style={{ textAlign: "center" }}>{profile.name}</h4>
                 <h6 style={{ textAlign: "center" }}>{profile.email}</h6>
+                <Provider></Provider>
                 <div className="mikenamediv m-2 border p-1">
                   <input
                     type="text"

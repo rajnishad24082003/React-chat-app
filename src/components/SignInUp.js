@@ -4,9 +4,6 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  signOut,
-  onAuthStateChanged,
 } from "firebase/auth";
 import { serverTimestamp, ref, set } from "firebase/database";
 import { auth, database } from "../misc/firebase";

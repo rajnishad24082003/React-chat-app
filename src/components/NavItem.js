@@ -6,7 +6,7 @@ const NavItem = ({ contactData }) => {
     <>
       {contactData.map((val, index) => {
         return (
-          <div className="mainNavitem">
+          <div key={index} className="mainNavitem">
             <a
               href="#"
               className="list-group-item list-group-item-action border-0"

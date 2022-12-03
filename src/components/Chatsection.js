@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../assets/css/chatsection.css";
 import Receiversec from "./chatsection/Receiversec";
 import Sendersec from "./chatsection/Sendersec";
+import Modal from "../components/Modal";
 function Chatsection() {
   let [inputdata, setInputdata] = useState("");
   let inputtextfun = (e) => {

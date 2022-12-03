@@ -15,21 +15,26 @@
   transition: transform 2s;
   transform: translateX(0%);
 }
-@media (max-width: 900px) {
+.heightlimit {
+  overflow-y: scroll;
+  max-height: 80vh;
+  position: fixed;
+  top: 6rem;
+  width: 22%;
+}
+@media screen and (max-width: 900px) {
   .bi-x-lg {
     display: block;
+  }
+  .heightlimit {
+    top: 5rem;
   }
 }
 .bi-chevron-double-right {
   position: fixed;
   bottom: 50%;
 }
-.heightlimit {
-  overflow-y: scroll;
-  max-height: 80vh;
-  position: fixed;
-  top: 6rem;
-}
+
 .nikenameinput {
   border: none !important;
 }
@@ -45,4 +50,7 @@
 }
 .displaywriteIcon {
   display: none;
+}
+.bi-chevron-double-right {
+  background-color: #fc8840;
 }

@@ -68,9 +68,12 @@
   .chatsectionseconddiv {
     width: 100%;
   }
+  .chatsectionmaindiv {
+    margin-top: 4.5rem;
+  }
 }
 .chatsectionseconddiv {
-  min-width: 80%;
+  min-width: 75%;
   height: 100%;
 }
 .headerofchat {
