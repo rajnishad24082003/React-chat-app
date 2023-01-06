@@ -61,7 +61,7 @@ function AvatarUpload() {
     try {
       const blob = await getBlod(canvas);
       const spaceRef = ref_storage(storage, `/profile/${profile.uid}/avatar`);
-      let avatarUploadresult = await uploadBytes(spaceRef, blob, {
+      await uploadBytes(spaceRef, blob, {
         cacheControl: `public,max-age=${3600 * 24 * 3}`,
       });
       let downloadurl = await getDownloadURL(

@@ -14,6 +14,7 @@
 .showclasssidebar {
   transition: transform 2s;
   transform: translateX(0%);
+  z-index: 1;
 }
 .heightlimit {
   overflow-y: scroll;
@@ -28,6 +29,9 @@
   }
   .heightlimit {
     top: 5rem;
+  }
+  .startingPageDiv {
+    min-width: 100%;
   }
 }
 .bi-chevron-double-right {
@@ -53,4 +57,48 @@
 }
 .bi-chevron-double-right {
   background-color: #fc8840;
+}
+.chatroomsmaindiv {
+  min-height: 2.5rem;
+  width: 100%;
+  position: relative;
+}
+.addroom {
+  background-color: #fc8840;
+  color: black;
+  top: 5px;
+  font-size: 2rem;
+  position: absolute;
+  right: 5px;
+  border-radius: 200px;
+  padding: 0 7px;
+  z-index: 1000;
+}
+.addroom:hover {
+  background-color: #ffa269;
+  color: rgb(255, 255, 255);
+  transition: all 400ms;
+  z-index: 1000;
+}
+.InputModalBody {
+  width: 100%;
+  border: 2px solid #fc8840;
+  border-radius: 10px;
+  padding: 10px;
+}
+.avatardivsec {
+  display: flex;
+  justify-content: center;
+}
+.AvatarEditordiv {
+  width: fit-content;
+}
+.AvatarEditordiv > p {
+  width: 100%;
+}
+.mainSiderbarDiv {
+  z-index: 1000 !important;
+}
+.lowZindex {
+  z-index: -1;
 }

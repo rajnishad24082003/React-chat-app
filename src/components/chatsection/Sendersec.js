@@ -1,31 +1,147 @@
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import TimeAgo from "timeago-react";
 import "../../assets/css/chatsection.css";
-function Sendersec() {
-  return (
-    <>
+import userimg from "../../assets/img/features-2.png";
+import { useHover, usePresence } from "../../misc/custom-hooks";
+
+function Sendersec({ valData, uid }) {
+  let [selfRef, isHoverd] = useHover();
+  let presence = usePresence(uid);
+  let [online_offline, setonline_offline] = useState(presence);
+  useEffect(() => {
+    if (presence) {
+      setonline_offline(presence.state);
+    }
+  }, [presence]);
+  let { val } = valData;
+  let { AudioData } = valData;
+  let { inputMessage } = valData;
+  if (inputMessage) {
+    return (
       <div className="chat-message-left pb-4">
         <div>
           <img
-            src="https://bootdey.com/img/Content/avatar/avatar3.png"
+            src={
+              valData.author.profileAvatar
+                ? valData.author.profileAvatar
+                : userimg
+            }
             className="rounded-circle mr-1"
-            alt="Sharon Lessman"
+            alt=""
             width="40"
             height="40"
           />
-          <div className="text-muted small text-nowrap mt-2">2:34 am</div>
-        </div>
-        <div className="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-          <div className="font-weight-bold mb-1">
-            <h5>other person</h5>
+          <div className="text-muted small text-nowrap mt-2">
+            <span
+              className={`bi bi-circle-fill chat-${online_offline} pe-1`}
+            ></span>
+            <TimeAgo datetime={new Date(valData.createdTime)}></TimeAgo>
           </div>
-          <p>
-            Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat
-            animal commodo.
-          </p>
+        </div>
+        <div
+          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+            isHoverd ? "bg-dark bg-opacity-10" : ""
+          }`}
+          ref={selfRef}
+        >
+          <div className="font-weight-bold mb-1" style={{ width: "100%" }}>
+            <h5>{valData.author.name}</h5>
+          </div>
+          <div>
+            <div className="inputMessageSize">{valData.inputMessage}</div>
+          </div>
         </div>
       </div>
-    </>
-  );
+    );
+  }
+  if (AudioData) {
+    return (
+      <div className="chat-message-left pb-4">
+        <div>
+          <img
+            src={
+              valData.author.profileAvatar
+                ? valData.author.profileAvatar
+                : userimg
+            }
+            className="rounded-circle mr-1"
+            alt=""
+            width="40"
+            height="40"
+          />
+          <div className="text-muted small text-nowrap mt-2">
+            <span
+              className={`bi bi-circle-fill chat-${online_offline} pe-1`}
+            ></span>
+            <TimeAgo datetime={new Date(valData.createdTime)}></TimeAgo>
+          </div>
+        </div>
+        <div
+          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+            isHoverd ? "bg-dark bg-opacity-10" : ""
+          }`}
+          ref={selfRef}
+        >
+          <div className="font-weight-bold mb-1" style={{ width: "100%" }}>
+            <h5>{valData.author.name}</h5>
+          </div>
+          <div>
+            <audio controls>
+              <source src={AudioData} type="audio/wav" />
+            </audio>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (val) {
+    return (
+      <div className="chat-message-left pb-4">
+        <div>
+          <img
+            src={
+              valData.author.profileAvatar
+                ? valData.author.profileAvatar
+                : userimg
+            }
+            className="rounded-circle mr-1"
+            alt=""
+            width="40"
+            height="40"
+          />
+          <div className="text-muted small text-nowrap mt-2">
+            <span
+              className={`bi bi-circle-fill chat-${online_offline} pe-1`}
+            ></span>
+            <TimeAgo datetime={new Date(valData.createdTime)}></TimeAgo>
+          </div>
+        </div>
+        <div
+          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+            isHoverd ? "bg-dark bg-opacity-10" : ""
+          }`}
+          ref={selfRef}
+        >
+          <div className="font-weight-bold mb-1" style={{ width: "100%" }}>
+            <h5>{valData.author.name}</h5>
+          </div>
+          <div>
+            {valData.val.map((currVal, numb) => {
+              return (
+                <img
+                  src={currVal.url}
+                  alt={currVal.name}
+                  className="sendimageFile"
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Sendersec;

@@ -5,6 +5,7 @@ import App from "./App";
 import "./assets/vendor/bootstrap/css/bootstrap.min.css";
 import "./assets/vendor/bootstrap-icons/bootstrap-icons.css";
 import "./assets/css/style.css";
+
 //import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,0 +1,19 @@
+.StartRecording {
+  border: 2px solid black;
+  border-radius: 200px;
+  padding: 5rem;
+  width: fit-content;
+  font-size: xx-large;
+}
+
+.OutterRecording {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.colourGreen {
+  background-color: rgb(144, 235, 91);
+}
+.colourRed {
+  background-color: rgb(255, 75, 75);
+}

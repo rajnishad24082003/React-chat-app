@@ -4,36 +4,42 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { serverTimestamp, ref, set } from "firebase/database";
 import { auth, database } from "../misc/firebase";
+import { Modal, Button } from "rsuite";
+
 function SignInUp() {
+  let [errorCode, seterrorCode] = useState("");
+  let [errorMessage, seterrorMessage] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => setOpen(false);
   let onproviderlogin = async (provider) => {
     try {
       let result = await signInWithPopup(auth, provider);
-
-      // await database.ref(`/profile/${result.user.uid}`).set({
-      //   name: result.user.displayName,
-      //   email: result.user.email,
-      //   createdAt: serverTimestamp(),
-      // });
-
       await set(ref(database, `/profile/${result.user.uid}`), {
         name: result.user.displayName,
         email: result.user.email,
         createdAt: serverTimestamp(),
         image: result.user.photoURL,
       });
-      console.log(result);
-    } catch (err) {
-      console.log(err.message);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      seterrorCode(errorCode);
+      seterrorMessage(errorMessage);
+      setOpen(true);
     }
   };
 
-  let onfacebooklogin = () => {
+  let onfacebooklogin = (e) => {
+    e.preventDefault();
     onproviderlogin(new FacebookAuthProvider());
   };
-  let ongooglelogin = () => {
+  let ongooglelogin = (e) => {
+    e.preventDefault();
     onproviderlogin(new GoogleAuthProvider());
   };
 
@@ -45,7 +51,62 @@ function SignInUp() {
   let signuppage = () => {
     setHideShow("right-panel-active");
   };
+  let [name, setName] = useState("");
+  let funForName = (e) => {
+    setName(e.target.value);
+  };
+  let [password, setpassword] = useState("");
+  let funForPassword = (e) => {
+    setpassword(e.target.value);
+  };
+  let [email, setEmail] = useState("");
+  let funForEmail = (e) => {
+    setEmail(e.target.value);
+  };
 
+  let signUpfun = async (ev) => {
+    ev.preventDefault();
+    let data = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        await set(ref(database, `/profile/${user.uid}`), {
+          name: name,
+          email: email,
+          createdAt: serverTimestamp(),
+          image: user.photoURL,
+        });
+      })
+      .catch((error) => {
+        seterrorCode(error.code);
+        seterrorMessage(error.message);
+        setOpen(true);
+      });
+  };
+  let [email2, setemail2] = useState("");
+  let [password2, setpassword2] = useState("");
+  let signUpEmailFun = (ev) => {
+    setemail2(ev.target.value);
+  };
+  let signUpPasswordFun = (ev) => {
+    setpassword2(ev.target.value);
+  };
+  let signInFun = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email2, password2)
+      .then(async (userCredential) => {})
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        seterrorCode(errorCode);
+        seterrorMessage(errorMessage);
+        setOpen(true);
+      });
+  };
   return (
     <div className="signInUpmainCont">
       <div className={`containersignup ${hideShow}`} id="containersignup">
@@ -58,12 +119,6 @@ function SignInUp() {
               <button onClick={onfacebooklogin} className="social asignup">
                 <i className="bi bi-facebook"></i>
               </button>
-              {/* <IconButton
-                icon={<FacebookOfficial />}
-                color="blue"
-                appearance="primary"
-                circle
-              /> */}
               <button onClick={ongooglelogin} className="social asignup">
                 <i className="bi bi-google"></i>
               </button>
@@ -71,14 +126,27 @@ function SignInUp() {
             <span className="spansignup">
               or use your email for registration
             </span>
-            <input className="inputsignup" type="text" placeholder="Name" />
-            <input className="inputsignup" type="email" placeholder="Email" />
             <input
               className="inputsignup"
-              type="password"
-              placeholder="Password"
+              type="text"
+              placeholder="name"
+              onChange={funForName}
             />
-            <button className="buttonsignup">Sign Up</button>
+            <input
+              className="inputsignup"
+              type="email"
+              placeholder="Email"
+              onChange={funForEmail}
+            />
+            <input
+              className="inputsignup"
+              type="text"
+              placeholder="Password"
+              onChange={funForPassword}
+            />
+            <button className="buttonsignup" onClick={signUpfun}>
+              Sign Up
+            </button>
             <button
               className="orsignin"
               onClick={() => {
@@ -104,16 +172,24 @@ function SignInUp() {
               </button>
             </div>
             <span className="spansignup">or use your account</span>
-            <input className="inputsignup" type="email" placeholder="Email" />
+            <input
+              className="inputsignup"
+              type="email"
+              placeholder="Email"
+              onChange={signUpEmailFun}
+            />
             <input
               className="inputsignup"
               type="password"
               placeholder="Password"
+              onChange={signUpPasswordFun}
             />
-            <a href="" className="asignup">
+            <a href="*" className="asignup">
               Forgot your password?
             </a>
-            <button className="buttonsignup">Sign In</button>
+            <button className="buttonsignup" onClick={signInFun}>
+              Sign In
+            </button>
             <button
               className="orsignup"
               onClick={() => {
@@ -129,7 +205,7 @@ function SignInUp() {
         {/* transition form sign in/up */}
         <div className="overlay-container">
           <div className="overlaysignup">
-            <div className="overlay-panel overlay-left">
+            <div className="overlay-panel overlay-right">
               <h1>Welcome Back!</h1>
               <p>
                 To keep connected with us please login with your personal info
@@ -138,20 +214,20 @@ function SignInUp() {
                 className="ghost buttonsignup"
                 id="signIn"
                 onClick={() => {
-                  signinpage();
+                  signuppage();
                 }}
               >
                 Sign In
               </button>
             </div>
-            <div className="overlay-panel overlay-right">
+            <div className="overlay-panel overlay-left">
               <h1>Hello, Friend!</h1>
               <p>Enter your personal details and start journey with us</p>
               <button
                 className="ghost buttonsignup"
                 id="signUp"
                 onClick={() => {
-                  signuppage();
+                  signinpage();
                 }}
               >
                 Sign Up
@@ -161,6 +237,17 @@ function SignInUp() {
         </div>
         {/* transition form sign in/up */}
       </div>
+      <Modal keyboard={false} open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>{errorCode}</Modal.Title>
+          <Modal.Body>{errorMessage}</Modal.Body>
+          <Modal.Footer>
+            <Button onClick={handleClose} appearance="subtle">
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal.Header>
+      </Modal>
     </div>
   );
 }

@@ -22,6 +22,14 @@ function App() {
             }
           ></Route>
           <Route
+            path={"/chatrooms/:id"}
+            element={
+              <PrivateRoute>
+                <Home></Home>
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
             path={"/signinup"}
             element={
               <PublicRoute>

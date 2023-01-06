@@ -1,8 +1,50 @@
 {
   "rules": {
     "profile": {
+      ".read": "auth != null",
+      ".write": "auth != null",
       "$user_id": {
-        ".read": "$user_id === auth.uid",
+        ".read": "$user_id != null",
+        ".write": "$user_id != null"
+      }
+    },
+    "rooms": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$room_id": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "personalChats": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$personalchat_id": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "groupImg": {
+      "$user_id": {
+        "$groupImg_id": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    },
+    "chats": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$chats_id": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "status": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$user_id": {
+        ".read": true,
         ".write": "$user_id === auth.uid"
       }
     },
