@@ -30,12 +30,15 @@ function FilesUpload() {
   const handleClose = () => setOpen(false);
   let { rooms } = useRooms();
   let currentRoom;
-  rooms.map((val) => {
-    if (val.id === id) {
-      currentRoom = val;
-    }
-    return null;
-  });
+  if (rooms) {
+    rooms.map((val) => {
+      if (val.id === id) {
+        currentRoom = val;
+      }
+      return null;
+    });
+  }
+
   let messageSend = async (val) => {
     const starCountRef = ref_database(database, `chats`);
     const newpostkey = push(starCountRef).key;

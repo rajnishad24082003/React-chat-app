@@ -2,23 +2,29 @@
   position: relative;
 }
 .bi-x-lg {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: sticky;
   display: none;
+  z-index: 1100;
+  border: 1px solid black;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 200px;
+  background-color: rgb(255, 255, 255);
+  top: 1%;
+  left: 80%;
 }
 .hideclasssidebar {
-  transition: transform 2s;
+  transition: transform 0.5s;
   transform: translateX(-100%);
 }
 .showclasssidebar {
-  transition: transform 2s;
+  transition: transform 0.5s;
   transform: translateX(0%);
   z-index: 1;
 }
 .heightlimit {
   overflow-y: scroll;
-  max-height: 80vh;
+  max-height: 90vh;
   position: fixed;
   top: 6rem;
   width: 22%;
@@ -42,8 +48,7 @@
 .nikenameinput {
   border: none !important;
 }
-.nikenameinput:focus {
-}
+
 .mikenamediv {
   display: flex;
   background-color: white;

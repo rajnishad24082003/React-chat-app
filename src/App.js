@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import HomePersonal from "./pages/HomePersonal";
 import Notfound from "./pages/Notfound";
 import SignInUp from "./components/SignInUp";
 import PrivateRoute from "./components/PrivateRoute";
@@ -26,6 +27,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Home></Home>
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path={"/personalChats/:idPersonalRoom"}
+            element={
+              <PrivateRoute>
+                <HomePersonal></HomePersonal>
               </PrivateRoute>
             }
           ></Route>

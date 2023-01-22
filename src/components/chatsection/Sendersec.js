@@ -6,7 +6,7 @@ import "../../assets/css/chatsection.css";
 import userimg from "../../assets/img/features-2.png";
 import { useHover, usePresence } from "../../misc/custom-hooks";
 
-function Sendersec({ valData, uid }) {
+function Sendersec({ valData, uid, key }) {
   let [selfRef, isHoverd] = useHover();
   let presence = usePresence(uid);
   let [online_offline, setonline_offline] = useState(presence);
@@ -20,7 +20,7 @@ function Sendersec({ valData, uid }) {
   let { inputMessage } = valData;
   if (inputMessage) {
     return (
-      <div className="chat-message-left pb-4">
+      <div className="chat-message-left pb-4" key={valData.createdTime}>
         <div>
           <img
             src={
@@ -41,7 +41,7 @@ function Sendersec({ valData, uid }) {
           </div>
         </div>
         <div
-          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+          className={` flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
             isHoverd ? "bg-dark bg-opacity-10" : ""
           }`}
           ref={selfRef}
@@ -50,7 +50,9 @@ function Sendersec({ valData, uid }) {
             <h5>{valData.author.name}</h5>
           </div>
           <div>
-            <div className="inputMessageSize">{valData.inputMessage}</div>
+            <div className="inputMessageSize messagewidth">
+              {valData.inputMessage}
+            </div>
           </div>
         </div>
       </div>
@@ -58,7 +60,7 @@ function Sendersec({ valData, uid }) {
   }
   if (AudioData) {
     return (
-      <div className="chat-message-left pb-4">
+      <div className="chat-message-left pb-4" key={valData.createdTime}>
         <div>
           <img
             src={
@@ -79,7 +81,7 @@ function Sendersec({ valData, uid }) {
           </div>
         </div>
         <div
-          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+          className={` flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
             isHoverd ? "bg-dark bg-opacity-10" : ""
           }`}
           ref={selfRef}
@@ -88,7 +90,7 @@ function Sendersec({ valData, uid }) {
             <h5>{valData.author.name}</h5>
           </div>
           <div>
-            <audio controls>
+            <audio controls className="messagewidth">
               <source src={AudioData} type="audio/wav" />
             </audio>
           </div>
@@ -98,7 +100,7 @@ function Sendersec({ valData, uid }) {
   }
   if (val) {
     return (
-      <div className="chat-message-left pb-4">
+      <div className="chat-message-left pb-4" key={valData.createdTime}>
         <div>
           <img
             src={
@@ -119,7 +121,7 @@ function Sendersec({ valData, uid }) {
           </div>
         </div>
         <div
-          className={`flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
+          className={` flex-shrink-1 bg-light rounded py-2 px-3 ml-3 ${
             isHoverd ? "bg-dark bg-opacity-10" : ""
           }`}
           ref={selfRef}
@@ -130,11 +132,16 @@ function Sendersec({ valData, uid }) {
           <div>
             {valData.val.map((currVal, numb) => {
               return (
-                <img
-                  src={currVal.url}
-                  alt={currVal.name}
-                  className="sendimageFile"
-                />
+                <div className="imgDiv" key={currVal.createdTime}>
+                  <img
+                    src={currVal.url}
+                    alt={currVal.name}
+                    className="sendimageFile "
+                  />
+                  <a href={currVal.url}>
+                    <i className="bi bi-cloud-download"></i>
+                  </a>
+                </div>
               );
             })}
           </div>

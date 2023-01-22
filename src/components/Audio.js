@@ -102,8 +102,6 @@ function Audio() {
             >
               {RecordingState} Recording
             </button>
-            <button onClick={stopRecording}>Stop Recording</button>
-            <video src={mediaBlobUrl} controls id="videoFileData" />
           </div>
         </Modal.Body>
         <Modal.Footer>

@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import "../assets/css/chatsection.css";
 import Sendersec from "./chatsection/Sendersec";
 import { CurrentRoomProvider } from "../context/current-room-context";
-import { useRooms } from "../context/Room.context";
+import { usePRooms } from "../context/PersonalRoom.context";
 import Loading from "./Loading";
 import { useParams } from "react-router";
 import spacefillimg from "../assets/img/features-2.png";
@@ -16,6 +16,7 @@ import TimeAgo from "timeago-react";
 import { useProfile } from "../context/profile.context";
 import { serverTimestamp, onValue } from "firebase/database";
 import { query } from "firebase/database";
+import GPayButton from "./GPayButton";
 
 function Chatsection() {
   let [titleInput, settitleInput] = useState("");
@@ -32,7 +33,7 @@ function Chatsection() {
     try {
       const sendFcm = httpsCallable(functions, "fcmSend");
       // const sendFcm = functions.httpsCallable("fcmSend");
-      await sendFcm(chatId.id, titleInput, descInput);
+      await sendFcm(chatId.idPersonalRoom, titleInput, descInput);
       setdescInput("");
       settitleInput("");
       handleCloseplusIconnoti(true);
@@ -46,17 +47,16 @@ function Chatsection() {
 
     onValue(msgdataFromdatabase, (snapshot) => {
       const alltheroomsdata = snapshot.val();
-      let transformedData = Object.keys(alltheroomsdata).map((val, index) => {
-        return {
-          ...alltheroomsdata[val],
-          id: val,
-        };
-      });
-      setallmsg(transformedData);
+      if (alltheroomsdata) {
+        let transformedData = Object.keys(alltheroomsdata).map((val, index) => {
+          return {
+            ...alltheroomsdata[val],
+            id: val,
+          };
+        });
+        setallmsg(transformedData);
+      }
     });
-    return () => {
-      off(msgdataFromdatabase, "value");
-    };
   }, [chatId]);
   let [inputdata, setInputdata] = useState("");
   let inputtextfun = (e) => {
@@ -74,21 +74,21 @@ function Chatsection() {
   let notificationbtn = () => {
     setnotiIconOpen(true);
   };
-  let { rooms } = useRooms();
+  let { rooms } = usePRooms();
   if (!rooms) {
     return <Loading />;
   } else {
     let currentRoom;
+
     rooms.map((val) => {
-      if (val.id === chatId.id) {
+      if (val.pRoom.MainUrl === chatId.idPersonalRoom) {
         currentRoom = val;
       }
       return null;
     });
-
     let assembledData = currentRoom
       ? {
-          roomId: currentRoom.id,
+          roomId: currentRoom.pRoom,
           author: {
             name: profile.name,
             uid: profile.uid,
@@ -104,10 +104,6 @@ function Chatsection() {
       const newpostkey = push(starCountRef).key;
       const updates = {};
       updates[`/chats/${newpostkey}`] = assembledData;
-      updates[`/rooms/${currentRoom.id}/lastMessage`] = {
-        ...assembledData,
-        msgId: newpostkey,
-      };
       update(ref(database), updates);
       setInputdata("");
     };
@@ -124,10 +120,9 @@ function Chatsection() {
         descOrdered[num - 1 - index] = allmsg[index];
         return null;
       });
+      allmsg = descOrdered;
     }
-
-    allmsg = descOrdered;
-
+    console.log(currentRoom);
     if (currentRoom) {
       return (
         <CurrentRoomProvider data={currentRoom}>
@@ -136,14 +131,14 @@ function Chatsection() {
               <div className="headerofchat">
                 <div className="d-flex align-items-start">
                   <img
-                    src={currentRoom ? currentRoom.imageUrl : spacefillimg}
+                    src={currentRoom ? currentRoom.pRoom.image : spacefillimg}
                     className="rounded-circle mr-1"
                     alt="Vanessa Tucker"
                     width="50"
                     height="50"
                   />
                   <div className="flex-grow-1 ml-3">
-                    <h5>{currentRoom ? currentRoom.name : "no name"}</h5>
+                    <h5>{currentRoom ? currentRoom.pRoom.name : "no name"}</h5>
                     <div className="small">
                       <span className="fas fa-circle chat-online"></span>{" "}
                     </div>
@@ -165,7 +160,7 @@ function Chatsection() {
               <div className="chatsfromboth mt-3">
                 {allmsg
                   ? allmsg.map((val, index) => {
-                      if (chatId.id === allmsg[index].roomId) {
+                      if (chatId.idPersonalRoom === allmsg[index].roomId) {
                         return (
                           <Sendersec
                             valData={val}
@@ -248,20 +243,20 @@ function Chatsection() {
               <Modal.Body>
                 <div>
                   <h5>Name</h5>
-                  <p>{currentRoom.name}</p>
+                  <p>{currentRoom.pRoom.name}</p>
                 </div>
 
                 <div className="mt-4">
                   <h5>Description</h5>
-                  <p>{currentRoom.description}</p>
+                  <GPayButton></GPayButton>
                   <p>
                     <b>Create Time: </b>
                     <TimeAgo datetime={currentRoom.createdAt}></TimeAgo>
                   </p>
                 </div>
                 <div className="mt-4">
-                  <h5>Group Icon</h5>
-                  <img src={currentRoom.imageUrl} alt="" />
+                  <h5>Profile Picture</h5>
+                  <img src={currentRoom.pRoom.image} alt="" />
                 </div>
               </Modal.Body>
               <Modal.Footer>

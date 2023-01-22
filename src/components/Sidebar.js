@@ -151,6 +151,7 @@ function Sidebar() {
         <Sidenav defaultOpenKeys={["3", "4"]}>
           <Sidenav.Body>
             <Nav activeKey="1">
+              <i className={`bi bi-x-lg `} onClick={hidesidebar}></i>
               <div className="userprofile">
                 <div
                   style={{
@@ -172,7 +173,6 @@ function Sidebar() {
                   <AvatarUpload></AvatarUpload>
                 </div>
 
-                <i className={`bi bi-x-lg `} onClick={hidesidebar}></i>
                 <h4 style={{ textAlign: "center" }}>{profile.name}</h4>
                 <h6 style={{ textAlign: "center" }}>{profile.email}</h6>
                 <Provider></Provider>

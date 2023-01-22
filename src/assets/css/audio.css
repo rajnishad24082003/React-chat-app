@@ -1,7 +1,7 @@
 .StartRecording {
   border: 2px solid black;
   border-radius: 200px;
-  padding: 5rem;
+  padding: 7rem 2rem;
   width: fit-content;
   font-size: xx-large;
 }
